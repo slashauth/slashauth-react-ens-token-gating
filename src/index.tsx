@@ -19,7 +19,7 @@ const providerOptions = {
 };
 
 root.render(
-  <SlashAuthProvider  clientID="xMLb7FGCqhfXDx_v" providers={providerOptions}>
+  <SlashAuthProvider clientID="xMLb7FGCqhfXDx_v" providers={providerOptions}>
     <App />
   </SlashAuthProvider>
 );
