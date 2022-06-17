@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 export const LoginStatus = () => {
   const [accessToken, setAccessToken] = useState('');
 
+  const [userHasRole, setUserHasRole] = useState(false);
+
   const {
     connectedWallet,
     isAuthenticated,
     isLoading,
+    hasRole,
     getAccessTokenSilently,
   } = useSlashAuth();
 
@@ -17,11 +20,15 @@ export const LoginStatus = () => {
     if (isAuthenticated) {
       getAccessTokenSilently().then((at: string) => {
         setAccessToken(at);
+        hasRole('ENS Token Holder').then((isHasRole: boolean) => {
+          setUserHasRole(isHasRole);
+        })
       });
     } else {
       setAccessToken('');
+      setUserHasRole(false);
     }
-  }, [getAccessTokenSilently, isAuthenticated]);
+  }, [getAccessTokenSilently, hasRole, isAuthenticated]);
 
   if (isLoading) {
     return (
@@ -38,6 +45,7 @@ export const LoginStatus = () => {
         {connectedWallet && <div >Wallet address: {connectedWallet}</div>}
         <div>Is Logged In? {isAuthenticated ? 'Yes' : 'No'}</div>
         {isAuthenticated && <div style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}} onClick={() => {navigator.clipboard.writeText(accessToken)}}>Click to copy access token</div>}
+        <div>Has Role? {userHasRole ? 'Yes' : 'No'}</div>
       </div>
     </div>
   );
